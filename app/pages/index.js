@@ -61,36 +61,37 @@ const fetcher = (library, abi) => (...args) => {
   return library[method](arg2, ...params)
 }
 
-export async function getServerSideProps(context) {
-  const provider = getProvider(NETWORK_NAME, ALCHEMY_API_KEY);
-  const contract = getContract(provider, CRYPTREES_ADDRESS, CRYPTREES_MINT_ABI);
-  const data = await getStaticData(contract);
-
-  return {
-    props: data,
-  }
-}
-
-export default function Index(STATIC_DATA) {
-  const [remainingTokens, setRemainingTokens] = useState(STATIC_DATA.max);
+export default function Index() {
+  const [STATIC_DATA, setSTATIC_DATA] = useState();
+  const [remainingTokens, setRemainingTokens] = useState();
   const { openAccountModal } = useAccountModal();
   const accountAddress = useAccount();
   const provider = useProvider();
-  const contract = getContract(provider, CRYPTREES_ADDRESS, CRYPTREES_MINT_ABI);
+  const contract = getContract(provider, CRYPTREES_ADDRESS, CRYPTREES_MINT_ABI);  
+
+  async function update() {
+    const totalSupply = await getTotalSupply(contract);
+    console.log(`total supply: ${totalSupply}`);
+    setRemainingTokens(STATIC_DATA.max - totalSupply);
+  }
 
   useEffect(() => {
-    async function update() {
-      const totalSupply = await getTotalSupply(contract);
-      console.log(`total supply: ${totalSupply}`);
-      setRemainingTokens(STATIC_DATA.max - totalSupply);
-    }
-    update();
+    getStaticData(contract).then((data) => {
+      setSTATIC_DATA(data);
+    });
     const transfer = contract.filters.Transfer();
     provider.on(transfer, (from, to, amount, event) => {
       console.log('Transfer|received', { from, to, amount, event })
       update();
-    })
+    });
   }, []);
+  useEffect(() => {
+    
+    if (STATIC_DATA) {
+      update();
+    }    
+    
+  }, [STATIC_DATA]);
 
   useEffect(() => {
     async function pull() {
@@ -106,7 +107,8 @@ export default function Index(STATIC_DATA) {
     if (openAccountModal) {
       pull();
     }
-  }, [openAccountModal])
+  }, [openAccountModal]);
+  
   return (
     <>
       <IndexNavbar fixed data={STATIC_DATA} remaining={remainingTokens} />

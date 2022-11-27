@@ -85,10 +85,10 @@ export default function MintButton({ isText, data, remaining }) {
 
     return (
         <Fragment>
-            {(openAccountModal && isText) && (
+            {(openAccountModal && data && isText) && (
                 <a onClick={() => handleClick()} className="text-amber-600 font-bold uppercase cursor-pointer">mint</a>
             )}
-            {(openAccountModal && isButton) && (
+            {(openAccountModal && data && isButton) && (
                 <div className={isLoading ? isMinting ? "animate-pulse animate-bounce" : "animate-pulse" : ""}>
                     <button disabled={isNotAvailable} onClick={() => handleClick()} className="mr-4 p-2 text-violet-800 bg-color-burn bg-gradient-to-b from-yellow-400 to-amber-500 shadow-amber-700 drop-shadow-lg backdrop-blur shadow-sm">
                         {isMinting ? 'Minting...' : 'Mint'} @
