@@ -17,9 +17,7 @@ export default function Navbar({ data, remaining }) {
         <div className="container px-4 mx-auto flex flex-wrap items-center justify-between">
           <div className="w-full relative flex justify-between lg:w-auto lg:static lg:block lg:justify-start">
             <Link href="/">
-              <p
-                className="text-md font-bold leading-relaxed inline-block mr-4 py-2 whitespace-nowrap uppercase"
-              >
+              <p className="text-md font-bold leading-relaxed inline-block mr-4 py-0 whitespace-nowrap uppercase">
                 <Logo weight={600} />
               </p>
 
@@ -33,44 +31,44 @@ export default function Navbar({ data, remaining }) {
             }
             id="example-navbar-warning"
           >
-            <ul className="flex flex-col lg:flex-row list-none mr-auto">
-              <li className="flex items-center">
-                <MintButton data={data} remaining={remaining} />
-              </li>
-              <li className="flex items-center hover:text-slate-500 text-slate-600">
+            <ul className="flex flex-col lg:flex-row list-none mr-auto">              
+              <li className="flex items-center hover:text-indigo-500 text-slate-600">
                 <a
                   className=" px-3 py-4 lg:py-2 flex items-center text-xs uppercase font-bold"
                   href={`https://${OPENSEA_URL}/collection/cryptrees`}
                 >
-                  <i className="text-slate-400 fa-solid fa-globe  text-lg leading-lg mr-1" />{" "}
+                  <i className="text-indigo-700 fa-solid fa-globe  text-lg leading-lg pb-1 mr-1" />{" "}
                   Collection
                 </a>
               </li>
-              <li className="flex items-center hover:text-slate-500 text-slate-600 ">
+              <li className="flex items-center hover:text-indigo-500 text-slate-600 ">
                 <Link href="/our-mission" className="px-3 py-4 lg:py-2 flex items-center text-xs uppercase font-bold">
-                  <i className="text-slate-400 fa-solid fa-heart text-lg leading-lg mr-1" />{" "}
+                  <i className="text-indigo-600 fa-solid fa-heart text-lg leading-lg pb-1 mr-1" />{" "}
                   Our Mission
                 </Link>
               </li>
               <li className="flex items-center">
                 <a
-                  className="hover:text-slate-500 text-slate-600 px-3 py-4 lg:py-2 flex items-center text-xs uppercase font-bold"
+                  className="hover:text-indigo-500 text-slate-600 px-3 py-4 lg:py-2 flex items-center text-xs uppercase font-bold"
                   href="https://github.com/cryptobotanicals/cryptrees"
                   target="_blank"
                 >
-                  <i className="text-slate-400 fab fa-github text-lg leading-lg mr-1" />
+                  <i className="text-indigo-500 fab fa-github text-lg leading-lg pb-1 mr-1" />
                   Code
                 </a>
               </li>
               <li className="flex items-center">
                 <a
-                  className="hover:text-slate-500 text-slate-600 px-3 py-4 lg:py-2 flex items-center text-xs uppercase font-bold"
+                  className="hover:text-indigo-500 text-slate-600 px-3 py-4 lg:py-2 flex items-center text-xs uppercase font-bold"
                   href={`https://${NETWORK_NAME}.etherscan.io/address/${CRYPTREES_ADDRESS}`}
                   target="_blank"
                 >
-                  <i className="text-slate-400 fa fa-gears text-lg leading-lg mr-1" />
+                  <i className="text-indigo-400 fa fa-gears text-lg leading-lg pb-1 mr-1" />
                   Contract
                 </a>
+              </li>
+              <li className="flex items-center">
+                <MintButton data={data} remaining={remaining} />
               </li>
             </ul>
             <ul className="flex flex-col lg:flex-row list-none lg:ml-auto">

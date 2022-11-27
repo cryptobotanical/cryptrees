@@ -1,25 +1,22 @@
 /* eslint-disable react/jsx-no-target-blank */
 import React, { useEffect, useState } from "react";
-import Image from 'next/image'
-import hugePic from '../public/img/brand/hugew.png'
-import teaser0Pic from '../public/img/brand/teaser0.png'
-import teaser1Pic from '../public/img/brand/teaser1.png'
-import teaser2Pic from '../public/img/brand/teaser2.png'
-import teaser3Pic from '../public/img/brand/teaser3.png'
-import teaser4Pic from '../public/img/brand/teaser4.png'
-import teaser5Pic from '../public/img/brand/teaser5.png'
-import teaser6Pic from '../public/img/brand/teaser6.png'
-import teaser7Pic from '../public/img/brand/teaser7.png'
-import teaser8Pic from '../public/img/brand/teaser8.png'
-import teaser9Pic from '../public/img/brand/teaser9.png'
-import teaser10Pic from '../public/img/brand/teaser10.png'
-import teaser11Pic from '../public/img/brand/teaser11.png'
-import teaser12Pic from '../public/img/brand/teaser12.png'
-import teaser13Pic from '../public/img/brand/teaser13.png'
-import "@ethersproject/shims";
-import { ethers } from 'ethers';
-import { useAccount, useNetwork, useProvider, useSigner, isAddress } from 'wagmi';
-
+import Image from 'next/image';
+import hugePic from '../public/img/brand/huge.png';
+import teaser0Pic from '../public/img/brand/teaser0.png';
+import teaser1Pic from '../public/img/brand/teaser1.png';
+import teaser2Pic from '../public/img/brand/teaser2.png';
+import teaser3Pic from '../public/img/brand/teaser3.png';
+import teaser4Pic from '../public/img/brand/teaser4.png';
+import teaser5Pic from '../public/img/brand/teaser5.png';
+import teaser6Pic from '../public/img/brand/teaser6.png';
+import teaser7Pic from '../public/img/brand/teaser7.png';
+import teaser8Pic from '../public/img/brand/teaser8.png';
+import teaser9Pic from '../public/img/brand/teaser9.png';
+import teaser10Pic from '../public/img/brand/teaser10.png';
+import teaser11Pic from '../public/img/brand/teaser11.png';
+import teaser12Pic from '../public/img/brand/teaser12.png';
+import teaser13Pic from '../public/img/brand/teaser13.png';
+import { useAccount, useProvider, isAddress } from 'wagmi';
 
 import MintButton from "../components/Buttons/MintButton";
 import RemainingConnect from "../components/Buttons/RemainingConnect";
@@ -27,13 +24,9 @@ import IndexNavbar from "../components/Navbars/IndexNavbar.js";
 import FooterSmall from "../components/Footers/FooterSmall.js";
 import Logo from "../components/Logo/Logo.js";
 
-import { getProvider, getContract, getStaticData, getTotalSupply } from "../system/chain";
+import { getContract, getStaticData, getTotalSupply } from "../system/chain";
 import { CRYPTREES_MINT_ABI } from '../config/abi';
-import {
-  useConnectModal,
-  useAccountModal,
-  useChainModal,
-} from '@rainbow-me/rainbowkit';
+import { useAccountModal, } from '@rainbow-me/rainbowkit';
 // Works in both a Webapp (browser) or Node.js:
 import { SequenceIndexerClient } from '@0xsequence/indexer';
 
@@ -64,6 +57,7 @@ const fetcher = (library, abi) => (...args) => {
 export default function Index() {
   const [STATIC_DATA, setSTATIC_DATA] = useState();
   const [remainingTokens, setRemainingTokens] = useState();
+  const [balances, setBalances] = useState();
   const { openAccountModal } = useAccountModal();
   const accountAddress = useAccount();
   const provider = useProvider();
@@ -86,11 +80,9 @@ export default function Index() {
     });
   }, []);
   useEffect(() => {
-    
     if (STATIC_DATA) {
       update();
-    }    
-    
+    }        
   }, [STATIC_DATA]);
 
   useEffect(() => {
@@ -102,6 +94,7 @@ export default function Index() {
         accountAddress: accountAddress.address,
         includeMetadata: true
       });
+      setBalances(nftBalances);
       console.log('collection of items:', nftBalances);
     }
     if (openAccountModal) {
@@ -137,7 +130,7 @@ export default function Index() {
           </div>
         </div>
         <Image
-          className="absolute z-0 b-auto right-0 top-10 sm:w-6/12 mr-48 sm:mt-0 w-11/12 shadow-slate-300 shadow-2xl"
+          className="absolute z-0 b-auto right-0 top-24 sm:w-6/12 mr-48 sm:mt-0 w-11/12 shadow-slate-300 shadow-2xl"
           src={hugePic}
           alt="..."
         />
@@ -169,7 +162,7 @@ export default function Index() {
               <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-inner shadow-slate-100 rounded-lg bg-slate-700">
                 <Image
                   alt="..."
-                  src={teaser13Pic}
+                  src={teaser10Pic}
                   className="w-full rounded-t-lg"
                 />
                 <blockquote className="relative p-8 mb-4">
@@ -202,7 +195,7 @@ export default function Index() {
                 <div className="w-full md:w-6/12 px-4">
                   <div className="relative flex flex-col mt-4">
                     <div className="px-4 py-5 flex-auto">
-                      <div className="text-indigo-500 p-3 text-center inline-flex items-center justify-center w-12 h-12 mb-5 shadow-lg rounded-full bg-white">
+                      <div className="text-indigo-700 p-3 text-center inline-flex items-center justify-center w-12 h-12 mb-5 shadow-lg rounded-full bg-white">
                         <i className="fas fa-vial"></i>
                       </div>
                       <h6 className="text-xl mb-1 font-semibold">
@@ -216,7 +209,7 @@ export default function Index() {
                   </div>
                   <div className="relative flex flex-col min-w-0">
                     <div className="px-4 py-5 flex-auto">
-                      <div className="text-indigo-500 p-3 text-center inline-flex items-center justify-center w-12 h-12 mb-5 shadow-lg rounded-full bg-white">
+                      <div className="text-indigo-600 p-3 text-center inline-flex items-center justify-center w-12 h-12 mb-5 shadow-lg rounded-full bg-white">
                         <i className="fas fa-award"></i>
                       </div>
                       <h6 className="text-xl mb-1 font-semibold">
@@ -244,7 +237,7 @@ export default function Index() {
                   </div>
                   <div className="relative flex flex-col min-w-0">
                     <div className="px-4 py-5 flex-auto">
-                      <div className="text-indigo-500 p-3 text-center inline-flex items-center justify-center w-12 h-12 mb-5 shadow-lg rounded-full bg-white">
+                      <div className="text-indigo-400 p-3 text-center inline-flex items-center justify-center w-12 h-12 mb-5 shadow-lg rounded-full bg-white">
                         <i className="fas fa-receipt"></i>
                       </div>
                       <h6 className="text-xl mb-1 font-semibold">
@@ -417,7 +410,7 @@ export default function Index() {
                       <Image
                         alt="..."
                         className="shadow-2xl shadow-zinc-600 rounded-full max-w-full w-46 mx-auto p-2 bg-zinc-500"
-                        src={teaser10Pic}
+                        src={teaser12Pic}
                       />
                       <p className="text-lg text-white mt-4 font-semibold">
 

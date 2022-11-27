@@ -90,9 +90,8 @@ export default function MintButton({ isText, data, remaining }) {
             )}
             {(openAccountModal && data && isButton) && (
                 <div className={isLoading ? isMinting ? "animate-pulse animate-bounce" : "animate-pulse" : ""}>
-                    <button disabled={isNotAvailable} onClick={() => handleClick()} className="mr-4 p-2 text-violet-800 bg-color-burn bg-gradient-to-b from-yellow-400 to-amber-500 shadow-amber-700 drop-shadow-lg backdrop-blur shadow-sm">
-                        {isMinting ? 'Minting...' : 'Mint'} @
-                        <span className="text-zinc-800 font-extrabold ml-2 mr-1">{data.price}</span> <span className="text-zinc-600">ETH</span>
+                    <button disabled={isNotAvailable} onClick={() => handleClick()} className="mb-1 p-1 font-bold font-mono text-violet-800 bg-color-burn bg-gradient-to-b from-yellow-400 to-amber-500 shadow-amber-700 drop-shadow-lg backdrop-blur shadow-sm">
+                        {isMinting ? 'Minting...' : 'Mint'} <span className="font-extrabold">{data.price}</span> <span className="text-zinc-600">ETH</span>
                     </button>
                 </div>
             )}

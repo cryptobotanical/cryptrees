@@ -4,10 +4,10 @@ import React from "react";
 
 export default function Logo({weight, short}) {
     return (
-    <>
+        <span className={`text-indigo-${weight + 100} hover:text-indigo-${weight - 100}`}>
         {!short && (
-                <span className={`text-indigo-${weight+100} uppercase`}>cryp</span>
+                <span className={`uppercase`}>cryp</span>
             )}<span className={`text-amber-${weight} font-bold uppercase`}>trees</span>
-    </>
+        </span>
     )
 }
