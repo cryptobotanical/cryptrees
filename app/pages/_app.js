@@ -48,7 +48,7 @@ Router.events.on("routeChangeError", () => {
   document.body.classList.remove("body-page-transition");
 });
 
-const myTheme = merge(darkTheme(), {
+const theme = merge(darkTheme(), {
   colors: {
     accentColor: 'rgb(51 65 85)',
     connectButtonBackground: 'rgb(51 65 85)',
@@ -91,15 +91,6 @@ const wagmiClient = createClient({
 });
 
 export default class MyApp extends App {
-  static async getInitialProps({ Component, router, ctx }) {
-    let pageProps = {};
-
-    if (Component.getInitialProps) {
-      pageProps = await Component.getInitialProps(ctx);
-    }
-
-    return { pageProps };
-  }
   render() {
     const { Component, pageProps } = this.props;
 
@@ -116,7 +107,7 @@ export default class MyApp extends App {
         </Head>
         <Layout>
           <WagmiConfig client={wagmiClient}>
-            <RainbowKitProvider theme={myTheme} chains={chains}>
+            <RainbowKitProvider theme={theme} chains={chains}>
               <Component {...pageProps} />
             </RainbowKitProvider>
           </WagmiConfig>

@@ -201,5 +201,18 @@ export const CRYPTREES_MINT_ABI = [
         "outputs": [],
         "stateMutability": "payable",
         "type": "function"
-    }
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "quantity_",
+                "type": "uint256"
+            }
+        ],
+        "name": "mint",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
 ];

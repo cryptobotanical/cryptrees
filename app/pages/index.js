@@ -18,94 +18,64 @@ import teaser12Pic from '../public/img/brand/teaser12.png';
 import teaser13Pic from '../public/img/brand/teaser13.png';
 import { useAccount, useProvider, isAddress } from 'wagmi';
 
-import MintButton from "../components/Buttons/MintButton";
+import { MintButton, MintConnect } from "../components/Buttons";
+import { Remaining } from "../components/Data";
 import RemainingConnect from "../components/Buttons/RemainingConnect";
 import IndexNavbar from "../components/Navbars/IndexNavbar.js";
 import FooterSmall from "../components/Footers/FooterSmall.js";
 import Logo from "../components/Logo/Logo.js";
 
-import { getContract, getStaticData, getTotalSupply } from "../system/chain";
-import { CRYPTREES_MINT_ABI } from '../config/abi';
+import { getContract, getStaticData, getTotalSupply, getMaxSupply } from "../system/chain";
 import { useAccountModal, } from '@rainbow-me/rainbowkit';
-// Works in both a Webapp (browser) or Node.js:
-import { SequenceIndexerClient } from '@0xsequence/indexer';
 
 import {
-  OPENSEA_URL,
   NETWORK_NAME,
   CRYPTREES_ADDRESS,
-  ALCHEMY_API_KEY,
-  INFURA_API_KEY,
-  POCKET_API_KEY,
-  ETHERSCAN_API_KEY,
 } from '../config';
 
-const fetcher = (library, abi) => (...args) => {
-  const [arg1, arg2, ...params] = args
-  // it's a contract
-  if (isAddress(arg1)) {
-    const address = arg1
-    const method = arg2
-    const contract = new Contract(address, abi, library.getSigner())
-    return contract[method](...params)
-  }
-  // it's a eth call
-  const method = arg1
-  return library[method](arg2, ...params)
-}
+
 
 export default function Index() {
   const [STATIC_DATA, setSTATIC_DATA] = useState();
   const [remainingTokens, setRemainingTokens] = useState();
   const [balances, setBalances] = useState();
-  const { openAccountModal } = useAccountModal();
-  const accountAddress = useAccount();
+  const { openAccountModal, isConnected } = useAccountModal();
+  const { address } = useAccount();
   const provider = useProvider();
-  const contract = getContract(provider, CRYPTREES_ADDRESS, CRYPTREES_MINT_ABI);  
+  const contract = getContract();
 
-  async function update() {
-    const totalSupply = await getTotalSupply(contract);
+  async function update(data) {    
+    const totalSupply = await getTotalSupply();
     console.log(`total supply: ${totalSupply}`);
-    setRemainingTokens(STATIC_DATA.max - totalSupply);
+    setRemainingTokens(data.max - totalSupply);
   }
 
   useEffect(() => {
-    getStaticData(contract).then((data) => {
+    getStaticData().then((data) => {
       setSTATIC_DATA(data);
     });
-    const transfer = contract.filters.Transfer();
-    provider.on(transfer, (from, to, amount, event) => {
-      console.log('Transfer|received', { from, to, amount, event })
-      update();
-    });
   }, []);
-  useEffect(() => {
-    if (STATIC_DATA) {
-      update();
-    }        
-  }, [STATIC_DATA]);
+  
 
   useEffect(() => {
-    async function pull() {
-      console.log('Account', accountAddress);
-      const indexer = new SequenceIndexerClient(`https://${NETWORK_NAME}-indexer.sequence.app`);
-      const nftBalances = await indexer.getTokenBalances({
-        contractAddress: CRYPTREES_ADDRESS,
-        accountAddress: accountAddress.address,
-        includeMetadata: true
+    if (!openAccountModal) return;    
+    const transferTo = contract.filters.Transfer(null, address);
+    provider.on(transferTo, (from, to, amount, event) => {
+      console.log('Transfer|received', { from, to, amount, event });
+      getMaxSupply().then((data) => {
+        update({ max: data });
       });
-      setBalances(nftBalances);
-      console.log('collection of items:', nftBalances);
-    }
-    if (openAccountModal) {
-      pull();
-    }
+    });
+  
+    return () => {
+      provider.removeAllListeners(transferTo)
+    }    
   }, [openAccountModal]);
   
   return (
     <>
       <IndexNavbar fixed data={STATIC_DATA} remaining={remainingTokens} />
-      <section className="header relative items-center flex h-[70vh]">
+      <section className="header relative items-center flex h-[60vh]">
         <div className="container mx-auto items-center flex flex-wrap z-10">
           <div className="w-full bg-slate-100 bg-opacity-90 shadow-slate-400 shadow-sm md:w-8/12 lg:w-6/12 xl:w-5/12 px-6">
             <div className="pt-4 sm:pt-0">
@@ -122,7 +92,9 @@ export default function Index() {
                 new <Logo weight={600} short /> is a forever pact with
                 a <Logo weight={600} short /> uniquely yours. Stop the deforestation! Claim your part of this dwindling resource before it is too late!
               </p>
-              <RemainingConnect data={STATIC_DATA} remaining={remainingTokens} />
+              <p className="mt-4 text-lg leading-relaxed text-slate-500">
+                <Remaining /> available to <MintConnect />
+              </p>              
               <div className="ml-12 mt-4 pb-6">
                 <MintButton data={STATIC_DATA} remaining={remainingTokens}/>
               </div>
@@ -130,7 +102,7 @@ export default function Index() {
           </div>
         </div>
         <Image
-          className="absolute z-0 b-auto right-0 top-24 sm:w-6/12 mr-48 sm:mt-0 w-11/12 shadow-slate-300 shadow-2xl"
+          className="absolute z-0 b-auto right-0 top-10 sm:w-6/12 mr-48 sm:mt-0 w-11/12 shadow-slate-300 shadow-2xl"
           src={hugePic}
           alt="..."
         />
@@ -146,23 +118,23 @@ export default function Index() {
             xmlns="http://www.w3.org/2000/svg"
             preserveAspectRatio="none"
             version="1.1"
-            viewBox="0 0 2560 210"
+            viewBox="0 0 2560 310"
             x="0"
             y="0"
           >
             <polygon
               className="text-slate-100 fill-current"
-              points="2560 0 2560 210 0 210"
+              points="2560 0 2560 310 0 310"
             ></polygon>
           </svg>
         </div>
         <div className="container mx-auto">
           <div className="flex flex-wrap items-center">
-            <div className="w-10/12 md:w-6/12 lg:w-4/12 px-12 md:px-4 mr-auto ml-auto -mt-32">
+            <div className="w-10/12 md:w-6/12 lg:w-4/12 px-12 md:px-4 mr-auto ml-auto lg:-mt-32">
               <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-inner shadow-slate-100 rounded-lg bg-slate-700">
                 <Image
                   alt="..."
-                  src={teaser10Pic}
+                  src={teaser1Pic}
                   className="w-full rounded-t-lg"
                 />
                 <blockquote className="relative p-8 mb-4">
@@ -190,7 +162,7 @@ export default function Index() {
               </div>
             </div>
 
-            <div className="w-full md:w-6/12 px-4">
+            <div className="w-full lg:-mt-32 md:w-6/12 px-4">
               <div className="flex flex-wrap">
                 <div className="w-full md:w-6/12 px-4">
                   <div className="relative flex flex-col mt-4">
@@ -309,7 +281,7 @@ export default function Index() {
                 />
                 <Image
                   alt="..."
-                  src={teaser1Pic}
+                  src={teaser10Pic}
                   className="w-full align-middle rounded-lg absolute shadow-lg max-w-210-px left-260-px -top-160-px"
                 />
                 <Image

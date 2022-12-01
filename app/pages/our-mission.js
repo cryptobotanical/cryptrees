@@ -5,7 +5,7 @@ import Navbar from "../components/Navbars/IndexNavbar.js";
 import FooterSmall from "../components/Footers/FooterSmall.js";
 import Logo from "../components/Logo/Logo.js";
 
-import { getProvider, getContract, getStaticData, getTotalSupply } from "../system/chain";
+import { getContract, getStaticData, getTotalSupply } from "../system/chain";
 import { CRYPTREES_MINT_ABI } from '../config/abi';
 import {
   OPENSEA_URL,
@@ -22,29 +22,33 @@ export default function Mission() {
   const [STATIC_DATA, setSTATIC_DATA] = useState();
   const [remainingTokens, setRemainingTokens] = useState();
   const provider = useProvider();
-  const contract = getContract(provider, CRYPTREES_ADDRESS, CRYPTREES_MINT_ABI);
+  const contract  = getContract();
 
-  async function update() {
-    const totalSupply = await getTotalSupply(contract);
+  async function update(data) {
+    const totalSupply = await getTotalSupply();
     console.log(`total supply: ${totalSupply}`);
-    setRemainingTokens(STATIC_DATA.max - totalSupply);
+    setRemainingTokens(data.max - totalSupply);
   }
 
   useEffect(() => {
-    getStaticData(contract).then((data) => {
+    getStaticData().then((data) => {
       setSTATIC_DATA(data);
     });
     const transfer = contract.filters.Transfer();
     provider.on(transfer, (from, to, amount, event) => {
-      console.log('Transfer|received', { from, to, amount, event })
-      update();
+      console.log('Transfer|received', { from, to, amount, event });
+      getStaticData().then((data) => {
+        setSTATIC_DATA(data);
+        update(data);
+      });
+      
     });
   }, []);
 
   useEffect(() => {
-    if (STATIC_DATA) {
-      update();
-    }
+    if (!STATIC_DATA) return;
+    
+    update(STATIC_DATA);    
   }, [STATIC_DATA]);
 
   return (
