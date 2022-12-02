@@ -76,8 +76,13 @@ export async function getMintStats(account) {
     console.log(`[chain] [getMintStats] account: `, account);
     const contract = getContract();
     const stats = await contract.getMintStats(account);
-    console.log(`[chain] [getMintStats] stats: `, stats);
-    return stats;
+    const result = {
+        minterNumMinted: ethers.utils.formatUnits(stats.minterNumMinted, 0),
+        maxSupply: ethers.utils.formatUnits(stats.maxSupply, 0),
+        totalSupply: ethers.utils.formatUnits(stats.currentTotalSupply, 0)
+    };        
+    console.log(`[chain] [getMintStats] stats: `, result);
+    return result;
 }
 
 export async function getStaticData() {        
@@ -112,5 +117,11 @@ export async function getTotalSupply() {
     const contract = getContract();
     const data = ethers.utils.formatUnits(await contract.totalSupply(), 0);
     console.log(`[chain] [getTotalSupply] data: `, data);
+    return data;
+}
+export async function getBalanceOf(address) {
+    const contract = getContract();
+    const data = ethers.utils.formatUnits(await contract.balanceOf(address), 0);
+    console.log(`[chain] [getBalanceOf] data: `, data);
     return data;
 }

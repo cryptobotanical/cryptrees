@@ -37,7 +37,7 @@ export default function MintButton({ isText, data, remaining }) {
             )}
             {(!openConnectModal && data && isButton) && (
                 <div className={isLoading ? isMinting ? "animate-pulse animate-bounce" : "animate-pulse" : ""}>
-                    <button disabled={isNotAvailable} onClick={() => setIsDialogOpen(true)} className="mb-1 p-1 px-2 font-bold font-mono text-slate-600 bg-color-burn bg-gradient-to-b from-green-400 to-emerald-400 shadow-indigo-700 drop-shadow-lg backdrop-blur shadow-sm">
+                    <button disabled={isNotAvailable} onClick={() => setIsDialogOpen(true)} className="mb-1 p-1 px-2 font-bold font-mono text-slate-600 bg-color-burn bg-gradient-to-b from-green-400 to-emerald-400 shadow-indigo-700 drop-shadow-lg backdrop-blur glow-sm border-transparent border-2 hover:border-indigo-700">
                         {isMinting ? 'Minting...' : 'Mint'}
                     </button>
                 </div>                

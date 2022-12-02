@@ -18,9 +18,8 @@ import teaser12Pic from '../public/img/brand/teaser12.png';
 import teaser13Pic from '../public/img/brand/teaser13.png';
 import { useAccount, useProvider, isAddress } from 'wagmi';
 
-import { MintButton, MintConnect } from "../components/Buttons";
-import { Remaining } from "../components/Data";
-import RemainingConnect from "../components/Buttons/RemainingConnect";
+import { MintButton } from "../components/Buttons";
+import { Remaining, Balance } from "../components/Data";
 import IndexNavbar from "../components/Navbars/IndexNavbar.js";
 import FooterSmall from "../components/Footers/FooterSmall.js";
 import Logo from "../components/Logo/Logo.js";
@@ -63,9 +62,9 @@ export default function Index() {
       <IndexNavbar fixed data={STATIC_DATA} remaining={remainingTokens} />
       <section className="header relative items-center flex h-[70vh] mt-0">
         <div className="container mx-auto items-center flex flex-wrap z-2">
-          <div className="w-full bg-gray-900 bg-opacity-90 shadow-emerald-500 glow-sm rounded-sm md:w-8/12 lg:w-6/12 xl:w-5/12 px-6">
-            <div className="py-4 mt-2 sm:pt-0 lg:mt-0">
-              <h2 className="font-semibold text-4xl lg:relative lg:-top-6 lg:-left-10">
+          <div className="w-full bg-gray-900 bg-opacity-90 shadow-emerald-500 glow-sm rounded-sm md:w-8/12 lg:w-6/12 xl:w-6/12 px-6">
+            <div className="py-2 mt-2 sm:pt-0 lg:pt-0 lg:-mt-2">
+              <h2 className="font-semibold text-4xl lg:relative lg:-top-4 lg:-left-10">
                 <Logo weight={500} />
               </h2>
               <h3 className="text-lg font-semibold font-serif text-indigo-600 uppercase">
@@ -78,9 +77,9 @@ export default function Index() {
                 a <Logo weight={600} short /> uniquely yours.
               </p>
               <p className="mt-2 lg:mt-4 text-lg leading-relaxed text-slate-300">
-                <Remaining /> available
+                <Remaining /> available, <Balance /> owned
               </p>              
-              <div className="ml-6 mt-4 pb-6">
+              <div className="ml-6 mt-4 pb-4">
                 <MintButton data={STATIC_DATA} remaining={remainingTokens}/>
               </div>
             </div>
