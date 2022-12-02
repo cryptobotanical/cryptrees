@@ -29,6 +29,7 @@ import { getContract, getStaticData, getTotalSupply, getMaxSupply } from "../sys
 import { useAccountModal, } from '@rainbow-me/rainbowkit';
 
 import {
+  OPENSEA_URL,
   NETWORK_NAME,
   CRYPTREES_ADDRESS,
 } from '../config';
@@ -56,59 +57,43 @@ export default function Index() {
     });
   }, []);
   
-
-  useEffect(() => {
-    if (!openAccountModal) return;    
-    const transferTo = contract.filters.Transfer(null, address);
-    provider.on(transferTo, (from, to, amount, event) => {
-      console.log('Transfer|received', { from, to, amount, event });
-      getMaxSupply().then((data) => {
-        update({ max: data });
-      });
-    });
-  
-    return () => {
-      provider.removeAllListeners(transferTo)
-    }    
-  }, [openAccountModal]);
   
   return (
     <>
       <IndexNavbar fixed data={STATIC_DATA} remaining={remainingTokens} />
-      <section className="header relative items-center flex h-[60vh]">
-        <div className="container mx-auto items-center flex flex-wrap z-10">
-          <div className="w-full bg-slate-100 bg-opacity-90 shadow-slate-400 shadow-sm md:w-8/12 lg:w-6/12 xl:w-5/12 px-6">
-            <div className="pt-4 sm:pt-0">
-              <h2 className="font-semibold text-4xl relative -top-5 -left-10">
+      <section className="header relative items-center flex h-[70vh] mt-0">
+        <div className="container mx-auto items-center flex flex-wrap z-2">
+          <div className="w-full bg-gray-900 bg-opacity-90 shadow-emerald-500 glow-sm rounded-sm md:w-8/12 lg:w-6/12 xl:w-5/12 px-6">
+            <div className="py-4 mt-2 sm:pt-0 lg:mt-0">
+              <h2 className="font-semibold text-4xl lg:relative lg:-top-6 lg:-left-10">
                 <Logo weight={500} />
               </h2>
-              <h3 className="text-lg font-semibold font-serif text-zinc-600 drop-shadow-lg shadow-indigo-600 uppercase">
+              <h3 className="text-lg font-semibold font-serif text-indigo-600 uppercase">
                 the authentic <Logo weight={600} short /> collection
               </h3>
-              <p className="mt-4 text-lg leading-relaxed text-slate-500">
+              <p className="mt-4 text-xl leading-relaxed text-slate-300">
                 Presenting the long awaited <Logo weight={600} short /> set of NFTs
-                that uniquely showcase your commitment to a green future and unyielding resolve to never turn your back on
-                humanity's shared mission to save this planet's majestic lungs. Each heroic act of minting a
+                that uniquely showcase your love of nature. Each heroic act of minting a
                 new <Logo weight={600} short /> is a forever pact with
-                a <Logo weight={600} short /> uniquely yours. Stop the deforestation! Claim your part of this dwindling resource before it is too late!
+                a <Logo weight={600} short /> uniquely yours.
               </p>
-              <p className="mt-4 text-lg leading-relaxed text-slate-500">
-                <Remaining /> available to <MintConnect />
+              <p className="mt-2 lg:mt-4 text-lg leading-relaxed text-slate-300">
+                <Remaining /> available
               </p>              
-              <div className="ml-12 mt-4 pb-6">
+              <div className="ml-6 mt-4 pb-6">
                 <MintButton data={STATIC_DATA} remaining={remainingTokens}/>
               </div>
             </div>
           </div>
         </div>
         <Image
-          className="absolute z-0 b-auto right-0 top-10 sm:w-6/12 mr-48 sm:mt-0 w-11/12 shadow-slate-300 shadow-2xl"
+          className="absolute z-0 b-auto right-0 top-0 h-[80vh] lg:h-auto sm:mt-10 shadow-slate-900 shadow-2xl"
           src={hugePic}
           alt="..."
         />
       </section>
 
-      <section className="mt-48 md:mt-40 pb-40 relative bg-slate-100">
+      <section className="mt-8 lg:mt-48 md:mt-40 lg:pb-40 relative bg-slate-800">
         <div
           className="-mt-20 top-0 bottom-auto left-0 right-0 w-full absolute h-20"
           style={{ transform: "translateZ(0)" }}
@@ -123,21 +108,21 @@ export default function Index() {
             y="0"
           >
             <polygon
-              className="text-slate-100 fill-current"
+              className="text-slate-800 fill-current"
               points="2560 0 2560 310 0 310"
             ></polygon>
           </svg>
         </div>
         <div className="container mx-auto">
           <div className="flex flex-wrap items-center">
-            <div className="w-10/12 md:w-6/12 lg:w-4/12 px-12 md:px-4 mr-auto ml-auto lg:-mt-32">
-              <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-inner shadow-slate-100 rounded-lg bg-slate-700">
+            <div className="w-11/12 md:w-6/12 lg:w-4/12 px-2 md:px-4 mr-auto ml-auto mt-4 lg:-mt-32">
+              <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-inner shadow-gray-700 rounded-lg bg-zinc-700">
                 <Image
                   alt="..."
                   src={teaser1Pic}
                   className="w-full rounded-t-lg"
                 />
-                <blockquote className="relative p-8 mb-4">
+                <blockquote className="relative p-4 mb-4">
                   <svg
                     preserveAspectRatio="none"
                     xmlns="http://www.w3.org/2000/svg"
@@ -146,78 +131,83 @@ export default function Index() {
                   >
                     <polygon
                       points="0,45 0,95 723,95"
-                      className="text-slate-700 fill-current"
+                      className="text-zinc-700 fill-current"
                     ></polygon>
                   </svg>
-                  <h4 className="text-xl font-bold text-white">
-                    181,440 possible combinations
+                  <h4 className="text-3xl font-bold ">
+                    <span className="text-indigo-500">181,440</span> possible combinations
                   </h4>
-                  <p className="text-md font-light mt-2 text-white">
-                    7 functional attributes that influence
-                    more than simply replacing words in a prompt. This
-                    collection was built using a Complex-Compositional
-                    Prompt system that guided Stable Diffusion.
+                  <p className="text-xl mt-2 text-slate-300">
+                    7 functional attributes that influence how each <Logo weight={500} short /> looks.
                   </p>
                 </blockquote>
               </div>
             </div>
 
-            <div className="w-full lg:-mt-32 md:w-6/12 px-4">
+            <div className="w-full lg:-mt-32 md:w-6/12 lg:px-4">
               <div className="flex flex-wrap">
-                <div className="w-full md:w-6/12 px-4">
+                <div className="w-full md:w-6/12 lg:px-4">
                   <div className="relative flex flex-col mt-4">
-                    <div className="px-4 py-5 flex-auto">
-                      <div className="text-indigo-700 p-3 text-center inline-flex items-center justify-center w-12 h-12 mb-5 shadow-lg rounded-full bg-white">
+                    <div className="px-4 pt-5 flex flex-row lg:flex-col">
+                      <div className="text-indigo-800 p-3 mr-2 text-center inline-flex items-center justify-center w-2/12 h-12 mb-5 shadow-lg rounded-full bg-gray-900">
                         <i className="fas fa-vial"></i>
                       </div>
-                      <h6 className="text-xl mb-1 font-semibold">
+                      <h6 className="text-3xl my-1 font-semibold">
                         Innovation
                       </h6>
-                      <p className="mb-4 text-slate-500">
+                    </div>
+                    <div className="px-4">
+                      <p className="mb-4 text-xl text-slate-300">
                         Procedurally guided AI generated stylized images.
                         Carefully curated and reproducable.
                       </p>
                     </div>
                   </div>
                   <div className="relative flex flex-col min-w-0">
-                    <div className="px-4 py-5 flex-auto">
-                      <div className="text-indigo-600 p-3 text-center inline-flex items-center justify-center w-12 h-12 mb-5 shadow-lg rounded-full bg-white">
+                    <div className="px-4 pt-5 flex flex-row lg:flex-col">
+                      <div className="text-indigo-700 p-3 mr-2 text-center inline-flex items-center justify-center w-2/12 h-12 mb-5 shadow-lg rounded-full bg-gray-900">
                         <i className="fas fa-award"></i>
                       </div>
-                      <h6 className="text-xl mb-1 font-semibold">
+                      <h6 className="text-3xl my-1 font-semibold">
                         Open Mint
                       </h6>
-                      <p className="mb-4 text-slate-500">
+                    </div>
+                    <div className="px-4">
+                      <p className="mb-4 text-xl text-slate-300">
                         We are currently in the initial public
-                        minting phase of 4500 available tokens.
+                        minting phase of {STATIC_DATA ? STATIC_DATA.max : "many"} available tokens.
                       </p>
                     </div>
                   </div>
                 </div>
-                <div className="w-full md:w-6/12 px-4">
+                <div className="w-full md:w-6/12 lg:px-4">
                   <div className="relative flex flex-col min-w-0 mt-4">
-                    <div className="px-4 py-5 flex-auto">
-                      <div className="text-indigo-500 p-3 text-center inline-flex items-center justify-center w-12 h-12 mb-5 shadow-lg rounded-full bg-white">
+                    <div className="px-4 pt-5 flex flex-row lg:flex-col">
+                      <div className="text-indigo-600 p-3 mr-2 text-center inline-flex items-center justify-center w-2/12 h-12 mb-5 shadow-lg rounded-full bg-gray-900">
                         <i className="fas fa-seedling"></i>
                       </div>
-                      <h6 className="text-xl mb-1 font-semibold">Conservation</h6>
-                      <p className="mb-4 text-slate-500">
+                      <h6 className="text-3xl my-1 font-semibold">Conservation</h6>
+                    </div>
+                    <div className="px-4">
+                      <p className="mb-4 text-xl text-slate-300">
                         We are dedicated to ensuring that the rainforest will be saved.
                         Each <Logo weight={600} /> symbolizes a real tree.
                       </p>
                     </div>
                   </div>
                   <div className="relative flex flex-col min-w-0">
-                    <div className="px-4 py-5 flex-auto">
-                      <div className="text-indigo-400 p-3 text-center inline-flex items-center justify-center w-12 h-12 mb-5 shadow-lg rounded-full bg-white">
+                    <div className="px-4 pt-5 flex flex-row lg:flex-col">
+                      <div className="text-indigo-500 p-3 mr-2 text-center inline-flex items-center justify-center w-2/12 h-12 mb-5 shadow-lg rounded-full bg-gray-900">
                         <i className="fas fa-receipt"></i>
                       </div>
-                      <h6 className="text-xl mb-1 font-semibold">
+                      <h6 className="text-3xl my-1 font-semibold w-10/12">
                         Open Source
                       </h6>
-                      <p className="mb-4 text-slate-500">
+                    </div>
+                    <div className="px-4">
+                      <p className="mb-4 text-xl text-slate-300">
                         <Logo weight={600} /> is committed to transparency, check out
-                        our <a className="text-amber-500" href="github.com/cryptobotanical/cryptrees">code</a> and the deployed <a className="text-amber-500" href={`https://${NETWORK_NAME}.etherscan.io/address/${CRYPTREES_ADDRESS}`}>contract</a>.
+                        our <a className="text-emerald-500" href="github.com/cryptobotanical/cryptrees">code</a> and the deployed <a className="text-emerald-500" href={`https://${NETWORK_NAME}.etherscan.io/address/${CRYPTREES_ADDRESS}`}>contract</a>.
                       </p>
                     </div>
                   </div>
@@ -227,52 +217,56 @@ export default function Index() {
           </div>
         </div>
 
-        <div className="container mx-auto overflow-hidden pb-20">
+        <div className="container mx-auto pb-20">
           <div className="flex flex-wrap items-center">
-            <div className="w-full md:w-4/12 px-12 md:px-4 ml-auto mr-auto mt-48">
-              <div className="text-indigo-500 p-3 text-center inline-flex items-center justify-center w-16 h-16 mb-6 shadow-lg rounded-full bg-white">
-                <i className="fas fa-wand-sparkles text-xl"></i>
+            <div className="hidden lg:inline w-full md:w-4/12 px-4 lg:px-12 md:px-4 ml-auto mr-auto lg:mt-48">
+              <div className="pt-5 flex flex-row lg:flex-col">
+                <div className="text-indigo-400 p-3 mr-2 text-center inline-flex items-center justify-center w-16 h-16 mb-6 shadow-lg rounded-full bg-gray-900">
+                  <i className="fas fa-wand-sparkles text-xl"></i>
+                </div>
+                <h3 className="text-3xl my-2 font-semibold leading-normal">
+                  Technology
+                </h3>
               </div>
-              <h3 className="text-3xl mb-2 font-semibold leading-normal">
-                Complex-Compositional Prompts
-              </h3>
-              <p className="text-lg font-light leading-relaxed mt-4 mb-4 text-slate-600">
-                Our own innovation that is expressed through layers of
-                masked prompt embeddings - of which each embedding
-                is described by the interpolation between a chain of
-                individual prompt phrases. This allows for the unprecendented
-                granularity of control over the what and where of notoriously
-                stubborn diffusion model output.
-              </p>
-              <div className="block pb-6">
-                <span className="text-xs font-semibold inline-block py-1 px-2 rounded-full text-slate-500 bg-white uppercase last:mr-0 mr-2 mt-2">
-                  Species
-                </span>
-                <span className="text-xs font-semibold inline-block py-1 px-2 rounded-full text-slate-500 bg-white uppercase last:mr-0 mr-2 mt-2">
-                  Genotype
-                </span>
-                <span className="text-xs font-semibold inline-block py-1 px-2 rounded-full text-slate-500 bg-white uppercase last:mr-0 mr-2 mt-2">
-                  Age
-                </span>
-                <span className="text-xs font-semibold inline-block py-1 px-2 rounded-full text-slate-500 bg-white uppercase last:mr-0 mr-2 mt-2">
-                  Environment
-                </span>
-                <span className="text-xs font-semibold inline-block py-1 px-2 rounded-full text-slate-500 bg-white uppercase last:mr-0 mr-2 mt-2">
-                  Size
-                </span>
-                <span className="text-xs font-semibold inline-block py-1 px-2 rounded-full text-slate-500 bg-white uppercase last:mr-0 mr-2 mt-2">
-                  Location
-                </span>
-                <span className="text-xs font-semibold inline-block py-1 px-2 rounded-full text-slate-500 bg-white uppercase last:mr-0 mr-2 mt-2">
-                  Style
-                </span>
-                <span className="text-xs font-semibold inline-block py-1 px-2 rounded-full text-slate-500 bg-white uppercase last:mr-0 mr-2 mt-2">
-                  Flavor
-                </span>
+              <div className="px-0">
+                <p className="text-xl leading-relaxed mt-0 mb-4 text-slate-300">
+                  Our own innovation that is expressed through layers of
+                  masked prompt embeddings - of which each embedding
+                  is described by the interpolation between a chain of
+                  individual prompt phrases. This allows for the unprecendented
+                  granularity of control over the what and where of notoriously
+                  stubborn diffusion model output.
+                </p>
+                <div className="block pb-6">
+                  <span className="text-xs font-semibold inline-block py-1 px-2 rounded-full text-emerald-500 bg-gray-800 uppercase last:mr-0 mr-2 mt-2">
+                    Species
+                  </span>
+                  <span className="text-xs font-semibold inline-block py-1 px-2 rounded-full text-emerald-500 bg-gray-800 uppercase last:mr-0 mr-2 mt-2">
+                    Genotype
+                  </span>
+                  <span className="text-xs font-semibold inline-block py-1 px-2 rounded-full text-emerald-500 bg-gray-800 uppercase last:mr-0 mr-2 mt-2">
+                    Age
+                  </span>
+                  <span className="text-xs font-semibold inline-block py-1 px-2 rounded-full text-emerald-500 bg-gray-800 uppercase last:mr-0 mr-2 mt-2">
+                    Environment
+                  </span>
+                  <span className="text-xs font-semibold inline-block py-1 px-2 rounded-full text-emerald-500 bg-gray-800 uppercase last:mr-0 mr-2 mt-2">
+                    Size
+                  </span>
+                  <span className="text-xs font-semibold inline-block py-1 px-2 rounded-full text-emerald-500 bg-gray-800 uppercase last:mr-0 mr-2 mt-2">
+                    Location
+                  </span>
+                  <span className="text-xs font-semibold inline-block py-1 px-2 rounded-full text-emerald-500 bg-gray-800 uppercase last:mr-0 mr-2 mt-2">
+                    Style
+                  </span>
+                  <span className="text-xs font-semibold inline-block py-1 px-2 rounded-full text-emerald-500 bg-gray-800 uppercase last:mr-0 mr-2 mt-2">
+                    Flavor
+                  </span>
+                </div>
               </div>
             </div>
 
-            <div className="w-full md:w-5/12 px-4 mr-auto ml-auto mt-32">
+            <div className="w-full md:w-5/12 pt-4 pb-20 mb-32 mr-auto ml-auto mt-12 lg:relative lg:-top-20">
               <div className="relative flex flex-col min-w-0 w-full mb-6 mt-48 md:mt-0">
                 <Image
                   alt="..."
@@ -297,7 +291,7 @@ export default function Index() {
                 <Image
                   alt="..."
                   src={teaser4Pic}
-                  className="w-full align-middle rounded absolute shadow-lg max-w-580-px -left-20-px top-210-px"
+                  className="hidden lg:inline w-full align-middle rounded absolute shadow-lg max-w-[380px] -left-20-px top-210-px"
                 />
                 <Image
                   alt="..."
@@ -308,133 +302,12 @@ export default function Index() {
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center pt-32">
-            <div className="w-full md:w-6/12 px-4 mr-auto ml-auto mt-32">
-              <div className="justify-center flex flex-wrap relative">
-                <div className="my-4 w-full lg:w-6/12 px-4">
-                  <a
-                    href="https://testnets.opensea.io/collection/cryptrees"
-                    target="_blank"
-                  >
-                    <div className="bg-gray-100 shadow-2xl shadow-zinc-600 rounded-2xl text-center p-1 m-5">
-                      <Image
-                        alt="..."
-                        className="shadow-2xl shadow-zinc-600 rounded-full max-w-full w-46 mx-auto p-2 bg-zinc-500"
-                        src={teaser6Pic}
-                      />
-                      <p className="text-lg text-white mt-4 font-semibold">
-
-                      </p>
-                    </div>
-                  </a>
-                  <a
-                    href="https://testnets.opensea.io/collection/cryptrees"
-                    target="_blank"
-                  >
-                    <div className="bg-gray-100 shadow-2xl shadow-zinc-600 rounded-2xl text-center p-1 m-5">
-                      <Image
-                        alt="..."
-                        className="shadow-2xl shadow-zinc-600 rounded-full max-w-full w-46 mx-auto p-2 bg-zinc-500"
-                        src={teaser7Pic}
-                      />
-                      <p className="text-lg text-white mt-4 font-semibold">
-
-                      </p>
-                    </div>
-                  </a>
-                  <a
-                    href="https://testnets.opensea.io/collection/cryptrees"
-                    target="_blank"
-                  >
-                    <div className="bg-gray-100 shadow-2xl shadow-zinc-600 rounded-2xl text-center p-1 m-5">
-                      <Image
-                        alt="..."
-                        className="shadow-2xl shadow-zinc-600 rounded-full max-w-full w-46 mx-auto p-2 bg-zinc-500"
-                        src={teaser8Pic}
-                      />
-                      <p className="text-lg text-white mt-4 font-semibold">
-
-                      </p>
-                    </div>
-                  </a>
-                </div>
-                <div className="my-4 w-full lg:w-6/12 px-4 lg:mt-16">
-                  <a
-                    href="https://testnets.opensea.io/collection/cryptrees"
-                    target="_blank"
-                  >
-                    <div className="bg-gray-100 shadow-2xl shadow-zinc-600 rounded-2xl text-center p-1 m-5">
-                      <Image
-                        alt="..."
-                        className="shadow-2xl shadow-zinc-600 rounded-full max-w-full w-46 mx-auto p-2 bg-zinc-500"
-                        src={teaser9Pic}
-                      />
-                      <p className="text-lg text-white mt-4 font-semibold">
-
-                      </p>
-                    </div>
-                  </a>
-                  <a
-                    href="https://testnets.opensea.io/collection/cryptrees"
-                    target="_blank"
-                  >
-                    <div className="bg-gray-100 shadow-2xl shadow-zinc-600 rounded-2xl text-center p-1 m-5">
-                      <Image
-                        alt="..."
-                        className="shadow-2xl shadow-zinc-600 rounded-full max-w-full w-46 mx-auto p-2 bg-zinc-500"
-                        src={teaser12Pic}
-                      />
-                      <p className="text-lg text-white mt-4 font-semibold">
-
-                      </p>
-                    </div>
-                  </a>
-                  <a
-                    href="https://testnets.opensea.io/collection/cryptrees"
-                    target="_blank"
-                  >
-                    <div className="bg-gray-100 shadow-2xl shadow-zinc-600 rounded-2xl text-center p-1 m-5">
-                      <Image
-                        alt="..."
-                        className="shadow-2xl shadow-zinc-600 rounded-full max-w-full w-46 mx-auto p-2 bg-zinc-500"
-                        src={teaser11Pic}
-                      />
-                      <p className="text-lg text-white m-2 font-semibold">
-
-                      </p>
-                    </div>
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            <div className="w-full md:w-4/12 px-12 md:px-4 ml-auto mr-auto mt-48">
-              <div className="text-indigo-500 p-3 text-center inline-flex items-center justify-center w-16 h-16 mb-6 shadow-lg rounded-full bg-white">
-                <i className="fas fa-sack-dollar text-xl"></i>
-              </div>
-              <h3 className="text-3xl mb-2 font-semibold leading-normal">
-                Secondary Market
-              </h3>
-              <p className="text-lg font-light leading-relaxed mt-4 mb-4 text-slate-600">
-                To facilitate the best secondary market trading experience, the ERC721A based
-                smart contract has been hand tailored to interface seamlessly with the latest
-                OpenSea and SeaDrop specifications.
-              </p>
-              <p className="text-lg font-light leading-relaxed mt-4 mb-4 text-slate-600">
-                We expect there to be a long term secondary potential for this collection,
-                so while it is initially participating in OpenSea's Operator Filter Registry,
-                we included an escape hatch into the contract to ensure it will never become stuck
-                if that registry stops acting in good faith.
-              </p>
-          </div>
         </div>
-      </div>
       </section>
-      <section>
-      </section>
-      <section className="pb-16 bg-slate-200 relative pt-32">
+      
+      <section className="pb-16 bg-slate-700 relative pt-2">
         <div
-          className="-mt-20 top-0 bottom-auto left-0 right-0 w-full absolute h-20"
+          className="lg:-mt-20 top-0 bottom-auto left-0 right-0 w-full absolute h-20"
           style={{ transform: "translateZ(0)" }}
         >
           <svg
@@ -447,7 +320,7 @@ export default function Index() {
             y="0"
           >
             <polygon
-              className="text-slate-200 fill-current"
+              className="text-slate-700 fill-current"
               points="2560 0 2560 100 0 100"
             ></polygon>
           </svg>

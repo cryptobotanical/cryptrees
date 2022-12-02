@@ -2,7 +2,7 @@ import React from "react";
 
 export default function PageChange(props) {
   return (
-    <div>
+    <div className="w-[100vh] absolute">
       <div
         className="bg-cover fixed z-40 w-full h-full top-0 left-0 backdrop-blur-lg"
       ></div>

@@ -5,7 +5,7 @@ import {
 export default function MintConnect() {
     const { openConnectModal } = useConnectModal();
     
-    let classStyle = "text-amber-600 font-bold uppercase cursor-pointer";
+    let classStyle = "text-emerald-600 font-bold uppercase cursor-pointer";
 
     if (openConnectModal) {
         return (
@@ -13,7 +13,7 @@ export default function MintConnect() {
         )
     }
 
-    classStyle = "text-amber-600 font-bold uppercase";
+    classStyle = "text-emerald-600 font-bold uppercase";
 
     return (
         <span className={classStyle}>mint</span>

@@ -7,7 +7,7 @@ export default function Logo({weight, short}) {
         <span className={`text-indigo-${weight + 100} hover:text-indigo-${weight - 100}`}>
         {!short && (
                 <span className={`uppercase`}>cryp</span>
-            )}<span className={`text-amber-${weight} font-bold uppercase`}>trees</span>
+            )}<span className={`text-emerald-${weight} font-bold uppercase`}>trees</span>
         </span>
     )
 }
