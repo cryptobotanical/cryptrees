@@ -90,6 +90,10 @@ const wagmiClient = createClient({
   provider,
 });
 
+export function reportWebVitals(metric) {
+  console.log(metric);
+}
+
 export default class MyApp extends App {
   render() {
     const { Component, pageProps } = this.props;
@@ -108,9 +112,9 @@ export default class MyApp extends App {
         <Layout>
           <WagmiConfig client={wagmiClient}>
             <RainbowKitProvider theme={theme} chains={chains}>
-              <Component {...pageProps} />
+              <Component {...pageProps} />              
             </RainbowKitProvider>
-          </WagmiConfig>
+          </WagmiConfig>          
         </Layout>
       </React.Fragment>
     );

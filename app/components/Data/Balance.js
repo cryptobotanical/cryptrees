@@ -7,8 +7,7 @@ export default function Balance() {
     const [balance, setBalance] = useState();
     const { address, isConnected } = useAccount();
     const provider = useProvider();
-    const contract = getContract();
-    console.log(`[Remaining] address: `, address, contract);
+    const contract = getContract();   
 
     async function update() {
         getMintStats(address).then((data) => {
@@ -27,7 +26,7 @@ export default function Balance() {
         });
 
         return () => {
-            provider.removeAllListeners(transferTo)
+            provider.removeAllListeners(transferTo);
         }
     }, [isConnected]);
 

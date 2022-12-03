@@ -1,11 +1,11 @@
 import { useCallback, useMemo, useState } from 'react';
-
+import { toast } from 'react-toastify';
 import { getContract, doMint, getMintStats, getMaxSupply, doBatchMint } from "../../system/chain";
 
 export default function useMint ({ 
+    onTxSuccess,
     onTxFail,
     onTxSubmit,
-    onTxSuccess, 
 }) {
     const [isSuccess, setSuccessState] = useState(false);
     const [isError, setErrorState] = useState(false);
@@ -44,9 +44,13 @@ export default function useMint ({
         }
 
         try {
-            const receipt = await tx.wait(1);
+            const receipt = await toast.promise(tx.wait(1), {
+                pending: "Buying...",
+                success: "Purchase Complete!",
+                error: "Purchase Failed."
+            });
 
-            console.log(`[onMint] receipt:`, receipt);
+            console.log(`[onMint] receipt: `, receipt);
             
             setMintingState(false);
             setLoadingState(false);

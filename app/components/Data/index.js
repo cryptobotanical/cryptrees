@@ -4,4 +4,4 @@ import Balance from "./Balance";
 export {
     Remaining,
     Balance
-} ;
+};

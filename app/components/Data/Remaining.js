@@ -9,11 +9,10 @@ export default function Remaining() {
     const { address, isConnected } = useAccount();
     const provider = useProvider();
     const contract = getContract();
-    console.log(`[Remaining] address: `, address, contract);
-
+    
     async function update() {
-        const max_p = getMaxSupply();
-        const total_p = getTotalSupply();
+        const max_p = getMaxSupply(contract);
+        const total_p = getTotalSupply(contract);
         Promise.all([max_p, total_p]).then(([max, total]) => {
             const result = parseInt(max) - parseInt(total);
             setRemaining(result);
@@ -30,7 +29,7 @@ export default function Remaining() {
         });
 
         return () => {
-            provider.removeAllListeners(transferTo)
+            provider.removeAllListeners(transferTo);
         }
     }, [isConnected]);   
     

@@ -18,53 +18,52 @@ import teaser12Pic from '../public/img/brand/teaser12.png';
 import teaser13Pic from '../public/img/brand/teaser13.png';
 import { useAccount, useProvider, isAddress } from 'wagmi';
 
-import { MintButton } from "../components/Buttons";
+import { MintButton } from "../components/MintButton";
 import { Remaining, Balance } from "../components/Data";
 import IndexNavbar from "../components/Navbars/IndexNavbar.js";
 import FooterSmall from "../components/Footers/FooterSmall.js";
 import Logo from "../components/Logo/Logo.js";
+import { ToastContainer } from 'react-toastify';
 
 import { getContract, getStaticData, getTotalSupply, getMaxSupply } from "../system/chain";
 import { useAccountModal, } from '@rainbow-me/rainbowkit';
-
+import 'react-toastify/dist/ReactToastify.min.css';
 import {
   OPENSEA_URL,
   NETWORK_NAME,
   CRYPTREES_ADDRESS,
 } from '../config';
 
-
+const contextClass = {
+  success: "bg-blue-600",
+  error: "bg-red-600",
+  info: "bg-gray-600",
+  warning: "bg-orange-400",
+  default: "bg-indigo-600",
+  dark: "bg-white-600 font-gray-300",
+};
 
 export default function Index() {
   const [STATIC_DATA, setSTATIC_DATA] = useState();
-  const [remainingTokens, setRemainingTokens] = useState();
-  const [balances, setBalances] = useState();
-  const { openAccountModal, isConnected } = useAccountModal();
-  const { address } = useAccount();
+  const { isConnected } = useAccountModal();
   const provider = useProvider();
-  const contract = getContract();
-
-  async function update(data) {    
-    const totalSupply = await getTotalSupply();
-    console.log(`total supply: ${totalSupply}`);
-    setRemainingTokens(data.max - totalSupply);
-  }
+  const contract = getContract(provider);
 
   useEffect(() => {
-    getStaticData().then((data) => {
+    getStaticData(contract).then((data) => {
       setSTATIC_DATA(data);
     });
-  }, []);
+  }, [isConnected]);
   
   
   return (
     <>
-      <IndexNavbar fixed data={STATIC_DATA} remaining={remainingTokens} />
+      <IndexNavbar fixed data={STATIC_DATA} />
       <section className="header relative items-center flex h-[70vh] mt-0">
         <div className="container mx-auto items-center flex flex-wrap z-2">
           <div className="w-full bg-gray-900 bg-opacity-90 shadow-emerald-500 glow-sm rounded-sm md:w-8/12 lg:w-6/12 xl:w-6/12 px-6">
             <div className="py-2 mt-2 sm:pt-0 lg:pt-0 lg:-mt-2">
-              <h2 className="font-semibold text-4xl lg:relative lg:-top-4 lg:-left-10">
+              <h2 className="font-semibold text-max pointer-events-none lg:relative lg:-top-4 lg:-left-10">
                 <Logo weight={500} />
               </h2>
               <h3 className="text-lg font-semibold font-serif text-indigo-600 uppercase">
@@ -80,7 +79,7 @@ export default function Index() {
                 <Remaining /> available, <Balance /> owned
               </p>              
               <div className="ml-6 mt-4 pb-4">
-                <MintButton data={STATIC_DATA} remaining={remainingTokens}/>
+                <MintButton data={STATIC_DATA} />
               </div>
             </div>
           </div>
@@ -88,7 +87,8 @@ export default function Index() {
         <Image
           className="absolute z-0 b-auto right-0 top-0 h-[80vh] lg:h-auto sm:mt-10 shadow-slate-900 shadow-2xl"
           src={hugePic}
-          alt="..."
+          priority={true}
+
         />
       </section>
 
@@ -117,7 +117,7 @@ export default function Index() {
             <div className="w-11/12 md:w-6/12 lg:w-4/12 px-2 md:px-4 mr-auto ml-auto mt-4 lg:-mt-32">
               <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-inner shadow-gray-700 rounded-lg bg-zinc-700">
                 <Image
-                  alt="..."
+                  palceholder="empty"
                   src={teaser1Pic}
                   className="w-full rounded-t-lg"
                 />
@@ -268,32 +268,32 @@ export default function Index() {
             <div className="w-full md:w-5/12 pt-4 pb-20 mb-32 mr-auto ml-auto mt-12 lg:relative lg:-top-20">
               <div className="relative flex flex-col min-w-0 w-full mb-6 mt-48 md:mt-0">
                 <Image
-                  alt="..."
+                  palceholder="empty"
                   src={teaser0Pic}
                   className="w-full align-middle rounded absolute shadow-lg max-w-100-px left-145-px -top-29-px z-3"
                 />
                 <Image
-                  alt="..."
+                  palceholder="empty"
                   src={teaser10Pic}
                   className="w-full align-middle rounded-lg absolute shadow-lg max-w-210-px left-260-px -top-160-px"
                 />
                 <Image
-                  alt="..."
+                  palceholder="empty"
                   src={teaser2Pic}
                   className="w-full align-middle rounded-lg absolute shadow-lg max-w-180-px left-40-px -top-225-px z-2"
                 />
                 <Image
-                  alt="..."
+                  palceholder="empty"
                   src={teaser3Pic}
                   className="w-full align-middle rounded-lg absolute shadow-2xl max-w-200-px -left-50-px top-25-px"
                 />
                 <Image
-                  alt="..."
+                  palceholder="empty"
                   src={teaser4Pic}
                   className="hidden lg:inline w-full align-middle rounded absolute shadow-lg max-w-[380px] -left-20-px top-210-px"
                 />
                 <Image
-                  alt="..."
+                  palceholder="empty"
                   src={teaser5Pic}
                   className="w-full align-middle rounded absolute shadow-xl max-w-120-px left-195-px top-95-px"
                 />
@@ -327,6 +327,10 @@ export default function Index() {
 
       </section>
       <FooterSmall/>
+      <ToastContainer
+        position="bottom-right"
+        theme="dark"
+      />
     </>
   );
 }

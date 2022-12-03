@@ -27,22 +27,22 @@ export function getProvider() {
     return provider;
 }
 
-export function getContract() {
+export function getContract(provider) {
     return new ethers.Contract(
         ethers.utils.getAddress(CRYPTREES_ADDRESS),
         CRYPTREES_MINT_ABI,
-        getProvider()
+        provider ? provider : getProvider()
     );
 }
 
-export async function doMint(signer) {
-    const contract = getContract();
+export async function doMint(signer, contract) {
+    contract = contract ? contract : getContract();
     const price = await contract.OPEN_MINT_PRICE();
     const tx = {
         gasLimit: '0x55555',
         to: ethers.utils.getAddress(contract.address),
         value: price,
-        data: contract.interface.encodeFunctionData('mint', [])
+        data: contract.interface.encodeFunctionData('mint()', [])
     }
 
     const response = await signer.sendTransaction(tx);
@@ -50,8 +50,8 @@ export async function doMint(signer) {
     return response;
 }
 
-export async function doBatchMint(quantity, signer) {
-    const contract = getContract();
+export async function doBatchMint(quantity, signer, contract) {
+    contract = contract ? contract : getContract();
     const price = await contract.OPEN_MINT_PRICE();
     const tx = {
         gasLimit: '0x55555',
@@ -65,16 +65,16 @@ export async function doBatchMint(quantity, signer) {
     return response;
 }
 
-export async function getMaxSupply() {
-    const contract = getContract();
+export async function getMaxSupply(contract) {
+    contract = contract ? contract : getContract();
     const data = ethers.utils.formatUnits(await contract.maxSupply(), 0);
     console.log(`[chain] [getMaxSupply] data: `, data);
     return data;
 }
 
-export async function getMintStats(account) {
+export async function getMintStats(account, contract) {
     console.log(`[chain] [getMintStats] account: `, account);
-    const contract = getContract();
+    contract = contract ? contract : getContract();
     const stats = await contract.getMintStats(account);
     const result = {
         minterNumMinted: ethers.utils.formatUnits(stats.minterNumMinted, 0),
@@ -85,8 +85,8 @@ export async function getMintStats(account) {
     return result;
 }
 
-export async function getStaticData() {        
-    const contract = getContract();
+export async function getStaticData(contract) {        
+    contract = contract ? contract : getContract();
     
     //const name = await contract.name();
     //const symbol = await contract.symbol();
@@ -106,21 +106,21 @@ export async function getStaticData() {
     return data
 }
 
-export async function getNextTokenId() {
-    const contract = getContract();
+export async function getNextTokenId(contract) {
+    contract = contract ? contract : getContract();
     const data = await contract.nextTokenId();
     console.log(`[chain] [getNextTokenId] data: `, data);
     return data.toNumber();
 }
 
-export async function getTotalSupply() {
-    const contract = getContract();
+export async function getTotalSupply(contract) {
+    contract = contract ? contract : getContract();
     const data = ethers.utils.formatUnits(await contract.totalSupply(), 0);
     console.log(`[chain] [getTotalSupply] data: `, data);
     return data;
 }
-export async function getBalanceOf(address) {
-    const contract = getContract();
+export async function getBalanceOf(address, contract) {
+    contract = contract ? contract : getContract();
     const data = ethers.utils.formatUnits(await contract.balanceOf(address), 0);
     console.log(`[chain] [getBalanceOf] data: `, data);
     return data;
